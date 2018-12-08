@@ -55,7 +55,7 @@
         </provider>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,18 +64,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".ForgetPwd" />
+        <activity android:name=".view.RegisterActivity" />
+        <activity android:name=".view.ForgetPWDActivity" />
         <activity
-            android:name=".Main2Activity"
+            android:name=".view.FragmentItemSetsActivity"
             android:label="@string/title_activity_main2" />
-        <activity android:name=".setActivity" />
-        <activity android:name=".pinglun" />
-        <activity android:name=".write_pinglun" />
-        <activity android:name=".ditu" />
-        <activity android:name=".jutipinglun"></activity>
+        <activity android:name=".view.SettingsActivity" />
+        <activity android:name=".view.ShareSubmitActivity" />
+        <activity android:name=".view.CommentActivity" />
+        <activity android:name=".view.HomeActivity" />
+        <activity android:name=".view.StrategyActivity"></activity>
     </application>
 
 </manifest>
