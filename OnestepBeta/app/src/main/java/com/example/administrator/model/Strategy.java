@@ -11,6 +11,27 @@ public class Strategy implements Serializable {
     private int num_likes;
     private Date publish_time;
     private String related_place;
+    private List<DotStrategy> dotStrategy;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    private String label;
+
 
     public List<DotStrategy> getDotStrategy() {
         return dotStrategy;
@@ -20,7 +41,6 @@ public class Strategy implements Serializable {
         this.dotStrategy = dotStrategy;
     }
 
-    private List<DotStrategy> dotStrategy;
 
 
     public Route getRoute() {

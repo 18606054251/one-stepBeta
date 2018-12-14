@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.administrator">
 
     <!-- 用于进行网络定位 -->
@@ -37,7 +38,11 @@
         android:label="一步"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning"
+        android:vmSafeMode="true"
+        android:allowClearUserData="true"
+        android:hardwareAccelerated="true" >
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="228669e8f503148c9274a13f9ded2477" />
@@ -74,7 +79,6 @@
         <activity android:name=".view.SettingsActivity" />
         <activity android:name=".view.ShareSubmitActivity" />
         <activity android:name=".view.CommentActivity" />
-        <activity android:name=".view.HomeActivity" />
         <activity android:name=".view.StrategyActivity"></activity>
     </application>
 
