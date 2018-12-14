@@ -1,5 +1,6 @@
 package com.example.administrator.view;
 
+import android.Manifest;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.Poi;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
@@ -55,6 +57,8 @@ import com.amap.api.services.poisearch.PoiSearch.SearchBound;
 
 import com.example.administrator.R;
 import com.example.administrator.util.ToastUtil;
+import com.example.administrator.util.Constants;
+
 import com.example.administrator.model.*;
 
 
@@ -63,16 +67,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 import static android.app.Activity.RESULT_OK;
+import static com.example.administrator.util.Constants.RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION;
+
 
 public class HomeActivity extends Fragment implements View.OnClickListener ,
         OnMapClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnMarkerClickListener,
-        OnPoiSearchListener{
+        OnPoiSearchListener,EasyPermissions.PermissionCallbacks{
 
+
+    private static final String TAG = "HomeActivity";
+
+    //显示地图属性
     private View view;
     private MapView mapView;
     private AMap aMap;
 
+    //搜索结果属性
     private PoiResult poiResult; // poi返回的结果
     private int currentPage = 0;// 当前页面，从0开始计数
     private PoiSearch.Query query;// Poi查询条件类
@@ -83,24 +96,21 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
     private PoiSearch poiSearch;
     private myPoiOverlay poiOverlay;// poi图层
     private List<PoiItem> poiItems;// poi数据
-
     private RelativeLayout mPoiDetail;
     private TextView mPoiName, mPoiAddress;
     private String keyWord = "";
     private EditText mSearchText;
 
 
+    //页面按钮
     private Button start_trace; //开始记录按钮
     private int button_status = 0;
     private Button review; //写评论按钮
     private Button share; //分享按钮
 
-    private View cover;//点击开始记录后的覆盖蒙版
 
 
-    private MarkerOptions markerOption; //用户点击评论时所在点的集合
-
-    private static final String TAG = "MainActivity";
+    //定位功能属性
     private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
@@ -108,19 +118,21 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
     private AMapLocation curLocation;
     private double distance;
     private boolean start_draw = false;
-
     private CircleOptions circle;
 
+
+    //数据部分属性
     private Strategy strategy;
     private Route route;
     private DotStrategy dotStrategy;
-    private List<LatLng> points;
+    private List<Point> points;
     private List<DotStrategy> dotStrategies;
     private static Double total_Latitude = 0.0;
     private static Double total_Longitude = 0.0;
     private static int count = 0;
 
 
+    //从写评论界面返回信息
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch(requestCode){
@@ -128,6 +140,8 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
                 if(resultCode == RESULT_OK){
                     DotStrategy dotStrategy = (DotStrategy)data.getSerializableExtra("strategy_data");
                     dotStrategies.add(dotStrategy);
+//                    Log.e(TAG,"信息："+dotStrategy.getComment());
+
 
                     //按回退按钮
 //                    String dataBack = data.getStringExtra("dataBack");
@@ -142,6 +156,101 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
     }
 
 
+    //重写请求权限
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions, grantResults, this);
+    }
+
+    /**
+     * 去申请权限
+     */
+    private void requestPermissions() {
+
+        String[] perms = {
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_CALL_LOG
+        };
+
+        //判断有没有权限
+        if (EasyPermissions.hasPermissions(getActivity(), perms)) {
+            //
+
+        } else {
+
+            // 如果没有权限, 就去申请权限
+            // this: 上下文
+            // Dialog显示的正文
+            // RC_CAMERA_AND_RECORD_AUDIO 请求码, 用于回调的时候判断是哪次申请
+            // perms 就是申请的权限
+            EasyPermissions.requestPermissions(this, "需要申请您的相机、手机访问、存储、定位权限", RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION, perms);
+
+        }
+    }
+
+
+    /**
+     * 权限申请成功的回调
+     *
+     * @param requestCode 申请权限时的请求码
+     * @param perms 申请成功的权限集合
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        Log.i(TAG, "onPermissionsGranted: ");
+        if (requestCode != RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION) {
+            return;
+        }
+        for (int i = 0; i < perms.size(); i++) {
+            if (perms.get(i).equals(Manifest.permission.CAMERA)) {
+                Log.i(TAG, "onPermissionsGranted: " + "相机权限成功");
+
+            } else if (perms.get(i).equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Log.i(TAG, "onPermissionsGranted: " + "存储权限成功");
+            }else if (perms.get(i).equals(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Log.i(TAG, "onPermissionsGranted: " + "定位权限成功");
+            }else if (perms.get(i).equals(Manifest.permission.READ_CALL_LOG)) {
+                Log.i(TAG, "onPermissionsGranted: " + "手机访问权限成功");
+            }
+
+        }
+
+    }
+
+    /**
+     * 权限申请拒绝的回调
+     *
+     * @param requestCode 申请权限时的请求码
+     * @param perms 申请拒绝的权限集合
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Log.i(TAG, "onPermissionsDenied: ");
+
+        if (requestCode != RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION) {
+            return;
+        }
+
+        for (int i = 0; i < perms.size(); i++) {
+            if (perms.get(i).equals(Manifest.permission.CAMERA)) {
+                Log.i(TAG, "onPermissionsDenied: " + "相机权限失败");
+
+            } else if (perms.get(i).equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Log.i(TAG, "onPermissionsDenied: " + "存储权限失败");
+            }else if (perms.get(i).equals(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Log.i(TAG, "onPermissionsDenied: " + "定位权限失败");
+            }else if (perms.get(i).equals(Manifest.permission.READ_CALL_LOG)) {
+                Log.i(TAG, "onPermissionsDenied: " + "手机访问权限失败");
+            }
+        }
+
+    }
+
+
+    //底栏
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -157,10 +266,15 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
         }
     };
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_home,container,false);
+        requestPermissions();
+
+
 //        BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
 //        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mapView = (MapView) view.findViewById(R.id.map);
@@ -170,26 +284,6 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
             aMap = mapView.getMap();
 
         }
-
-        circle = new CircleOptions().
-                center(new LatLng(30,116)).
-                radius(10000000).
-                fillColor(Color.argb(55, 1, 1, 1));
-
-
-        aMap.setOnMapClickListener(this);
-        aMap.setOnMarkerClickListener(this);
-        aMap.setOnInfoWindowClickListener(this);
-        aMap.setInfoWindowAdapter(this);
-
-//        if (view.getSupportActionBar() != null){
-//            getSupportActionBar().hide();
-//        }
-
-        aMap.getUiSettings().setZoomControlsEnabled(false);
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-        aMap.setMapTextZIndex(2);
-
 
         init();
         setup();
@@ -214,6 +308,13 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
         review  =(Button)view.findViewById(R.id.review);
         share = (Button)view.findViewById(R.id.share);
 
+        circle = new CircleOptions().
+                center(new LatLng(30,116)).
+                radius(10000000).
+                fillColor(Color.argb(55, 1, 1, 1));
+
+
+
 
         start_trace.setOnClickListener(new View.OnClickListener() {
 
@@ -224,7 +325,7 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
                     case 0:
 
                         strategy = new Strategy();
-                        points = new ArrayList<LatLng>();
+                        points = new ArrayList<Point>();
                         dotStrategies = new ArrayList<DotStrategy>();
 
                         start_trace.setBackgroundResource(R.drawable.end_trace);
@@ -275,12 +376,13 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
                 route = new Route();
                 route.setPoints(points);
                 route.setTotal_distance(distance);
-                route.setFeat_LatLng(new LatLng(total_Latitude/count,total_Longitude/count));
+                route.setFeat_LatLng(new Point(total_Latitude/count,total_Longitude/count));
                 strategy.setRoute(route);
                 strategy.setPublish_time(date);
                 strategy.setDotStrategy(dotStrategies);
                 Intent intent = new Intent(getActivity(),ShareSubmitActivity.class);
-                startActivityForResult(intent,1);
+                intent.putExtra("strategy_data", strategy);
+                startActivity(intent);
 
             }
         });
@@ -291,10 +393,9 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
             //点击写评论按钮
             public void onClick(View v) {
 
-
-
                 Intent intent = new Intent(getActivity(),CommentActivity.class);
                 startActivityForResult(intent,1);
+
             }
 
 
@@ -317,6 +418,13 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.setLocationSource(mLocationSource);// 设置定位监听
+        aMap.setOnMapClickListener(this);
+        aMap.setOnMarkerClickListener(this);
+        aMap.setOnInfoWindowClickListener(this);
+        aMap.setInfoWindowAdapter(this);
+        aMap.getUiSettings().setZoomControlsEnabled(false);
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        aMap.setMapTextZIndex(2);
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
 
@@ -336,8 +444,6 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
         mPoiAddress = (TextView) view.findViewById(R.id.poi_address);
         mSearchText = (EditText)view.findViewById(R.id.input_edittext);
     }
-
-
 
 
 
@@ -419,6 +525,8 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
 
 
 
+
+    //地点搜索
     @Override
     public void onPoiSearched(PoiResult result, int rcode) {
         if (rcode == AMapException.CODE_AMAP_SUCCESS) {
@@ -600,7 +708,6 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
 
 
 
-
     /**
      * 绘制运动路线
      *
@@ -700,12 +807,12 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
 
 
                         drawLines(amapLocation);//一边定位一边连线
-                        points.add(new LatLng(amapLocation.getLatitude(),amapLocation.getLongitude()));
+                        points.add(new Point(amapLocation.getLatitude(),amapLocation.getLongitude()));
                         total_Latitude+= amapLocation.getLatitude();
                         total_Longitude+= amapLocation.getLongitude();
                         count++;
                         distance += distance;
-                        Toast.makeText(getActivity(), "经纬度"+distance+"KM",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "经纬度"+distance+"KM",Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -757,8 +864,6 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
                 }
             }
         }
-
-
 
 
 
@@ -880,6 +985,12 @@ public class HomeActivity extends Fragment implements View.OnClickListener ,
             }
         }
     }
+
+
+
+
+
+
 
 
 }

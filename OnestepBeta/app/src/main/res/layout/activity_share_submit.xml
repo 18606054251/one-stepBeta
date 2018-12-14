@@ -35,6 +35,7 @@
                     android:textSize="18sp"
                     />
                 <EditText
+                    android:id="@+id/strategyTitle"
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
                     />
@@ -73,6 +74,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_food"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -89,6 +91,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_scene"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -115,6 +118,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_countryside"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -131,6 +135,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_city"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -162,6 +167,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_oneDay"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -178,6 +184,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_days"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -204,6 +211,8 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_group"
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
@@ -220,6 +229,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <CheckBox
+                                android:id="@+id/label_single"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 />
