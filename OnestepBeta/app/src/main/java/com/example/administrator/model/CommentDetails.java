@@ -1,6 +1,8 @@
 package com.example.administrator.model;
 
-public class CommentDetails {
+import java.io.Serializable;
+
+public class CommentDetails implements Serializable {
     private String pinglunname;
     private String pingluncomment;
     private int pinglunid;

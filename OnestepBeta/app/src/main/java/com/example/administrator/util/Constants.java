@@ -31,4 +31,8 @@ public class Constants {
 	public static final LatLng XIAN = new LatLng(34.341568, 108.940174);// 西安市经纬度
 	public static final LatLng ZHENGZHOU = new LatLng(34.7466, 113.625367);// 郑州市经纬度
 
+    public static final int RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION = 7000;
+
+
+
 }
