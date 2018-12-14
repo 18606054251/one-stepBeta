@@ -45,7 +45,6 @@ public class ShareSubmitActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(ShareSubmitActivity.this,"提交成功",Toast.LENGTH_SHORT).show();
 
-
                 EditText title = findViewById(R.id.strategyTitle);
                 CheckBox checkBox_food = findViewById(R.id.label_food);
                 CheckBox checkBox_scene = findViewById(R.id.label_scene);
@@ -98,7 +97,6 @@ public class ShareSubmitActivity extends AppCompatActivity {
                 Log.e(TAG,"时间"+strategy.getPublish_time().toString());
                 startActivity(intent);
                 finish();
-
             }
         });
 

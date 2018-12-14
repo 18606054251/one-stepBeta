@@ -23,8 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
-import static android.app.PendingIntent.getActivity;
-
 public class CommentActivity extends AppCompatActivity {
     public static final int TAKE_POTHO=1;
     private ImageView imageView;
