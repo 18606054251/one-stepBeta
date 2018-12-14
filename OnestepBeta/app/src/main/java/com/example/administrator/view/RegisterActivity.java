@@ -49,15 +49,15 @@ public class RegisterActivity extends AppCompatActivity {
         init();
         TextView titleR = (TextView)findViewById(R.id.title_name);
         titleR.setText("注册账号");
-        Button back = (Button)findViewById(R.id.title_button1);
-        back.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        Button back = (Button)findViewById(R.id.title_button1);
+//        back.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view)
+//            {
+//                Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         time = new TimeCount(60000, 1000);
        geticode = (Button) findViewById(R.id.geticode_button);
        geticode.setOnClickListener(new View.OnClickListener() {

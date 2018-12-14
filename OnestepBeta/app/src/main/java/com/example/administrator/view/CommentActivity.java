@@ -1,4 +1,5 @@
 package com.example.administrator.view;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static android.app.PendingIntent.getActivity;
+
 public class CommentActivity extends AppCompatActivity {
     public static final int TAKE_POTHO=1;
     private ImageView imageView;
@@ -34,8 +37,7 @@ public class CommentActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CommentActivity.this,HomeActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
         Button tijiao = (Button)findViewById(R.id.tijiaopinglun);

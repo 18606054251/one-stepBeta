@@ -1,4 +1,4 @@
-package com.example.administrator.util;
+package com.example.administrator.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.administrator.R;
+import com.example.administrator.util.fenxiangkuang;
 
 import java.util.List;
 

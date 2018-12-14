@@ -15,7 +15,7 @@ public class TitleLayout extends LinearLayout {
     public TitleLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.title,this);
-        Button titleBack = (Button)findViewById(R.id.title_button1);
+        Button titleBack = (Button)findViewById(R.id.titleButton1);
         titleBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

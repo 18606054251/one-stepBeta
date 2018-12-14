@@ -15,18 +15,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Button back = (Button)findViewById(R.id.title_button1);
         TextView textView = (TextView)findViewById(R.id.title_name);
         textView.setText("设置");
         Button outLogin = (Button)findViewById(R.id.outLogin);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SettingsActivity.this,FragmentItemSetsActivity.class);
-                startActivity(intent);
-            }
-        });
-
         outLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

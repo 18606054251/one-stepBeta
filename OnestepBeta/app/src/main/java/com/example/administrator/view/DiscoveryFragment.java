@@ -20,7 +20,7 @@ import android.widget.ImageView;
 
 import com.example.administrator.R;
 import com.example.administrator.util.fenxiangkuang;
-import com.example.administrator.util.fenxiangkuangAdapter;
+import com.example.administrator.adapter.fenxiangkuangAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -44,15 +44,6 @@ public class LoginActivity extends AppCompatActivity{
 
         TextView title = (TextView)findViewById(R.id.title_name);
         title.setText("登录账号");
-        Button back = (Button)findViewById(R.id.title_button1);
-        back.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-            }
-        });
         TextView forGetPwd = (TextView) findViewById(R.id.loginForgetPwd);
         forGetPwd.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -62,7 +53,6 @@ public class LoginActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-
 
         login = (Button)findViewById(R.id.sign_in);
         t1 = (TextView) findViewById(R.id.email);

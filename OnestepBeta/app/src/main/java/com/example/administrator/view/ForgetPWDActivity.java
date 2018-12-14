@@ -13,16 +13,16 @@ public class ForgetPWDActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pwd);
-        Button back =(Button)findViewById(R.id.title_button1);
-        back.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent=new Intent(ForgetPWDActivity.this,LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+//        Button back =(Button)findViewById(R.id.title_button1);
+//        back.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view)
+//            {
+//                Intent intent=new Intent(ForgetPWDActivity.this,LoginActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
 
     }
 }
